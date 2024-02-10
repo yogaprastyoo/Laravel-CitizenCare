@@ -14,7 +14,7 @@ return [
     */
 
     'defaults' => [
-        'guard' => 'web',
+        'guard' => 'citizen',
         'passwords' => 'users',
     ],
 
@@ -36,9 +36,14 @@ return [
     */
 
     'guards' => [
-        'web' => [
+        'citizen' => [
             'driver' => 'session',
-            'provider' => 'users',
+            'provider' => 'citizens',
+        ],
+
+        'officer' => [
+            'driver' => 'session',
+            'provider' => 'officers',
         ],
     ],
 
@@ -60,10 +65,20 @@ return [
     */
 
     'providers' => [
-        'users' => [
+        'citizens' => [
             'driver' => 'eloquent',
-            'model' => App\Models\User::class,
+            'model' => App\Models\Citizen::class,
         ],
+
+        'officers' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Officer::class,
+        ],
+
+        // 'users' => [
+        //     'driver' => 'eloquent',
+        //     'model' => App\Models\User::class,
+        // ],
 
         // 'users' => [
         //     'driver' => 'database',

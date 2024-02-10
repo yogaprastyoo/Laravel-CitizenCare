@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AuthenticatedSessionController;
 use App\Http\Controllers\CitizenController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\OfficerController;
@@ -24,65 +25,81 @@ Route::view('/service', 'pages.service')
     ->name('service');
 Route::view('/contact', 'pages.contact')
     ->name('contact');
-Route::view('/login', 'auth.login')
-    ->name('login');
 
 /**
- * DashboardController.
+ * AuthenticatedSessionController.
  */
-Route::controller(DashboardController::class)->group(function () {
-    Route::get('/dashboard', 'index')
-        ->name('dashboard');
+Route::controller(AuthenticatedSessionController::class)->group(function () {
+    Route::get('/login', 'index')
+        ->middleware('guest')
+        ->name('login');
+
+    Route::post('/login/store', 'store')
+        ->name('login.store');
+
+    Route::get('/logout', 'destroy')
+        ->name('logout');
 });
 
-/**
- * CitizenController.
- */
-Route::controller(CitizenController::class)->group(function () {
-    Route::get('/citizens', 'index')
-        ->name('citizens');
 
-    Route::get('/citizen/create', 'create')
-        ->name('citizen.create');
+Route::middleware(['auth:citizen,officer'])->group(function () {
+    /**
+     * DashboardController.
+     */
+    Route::controller(DashboardController::class)->group(function () {
+        Route::get('/dashboard', 'index')
+            ->name('dashboard');
+    });
 
-    Route::post('/citizen/store', 'store')
-        ->name('citizen.store');
+    /**
+     * CitizenController.
+     */
+    Route::controller(CitizenController::class)->group(function () {
+        Route::get('/citizens', 'index')
+            ->name('citizens');
 
-    Route::get('/citizen/{national_id}', 'show')
-        ->name('citizen.show');
+        Route::get('/citizen/create', 'create')
+            ->name('citizen.create');
 
-    Route::get('/citizen/{national_id}/edit', 'edit')
-        ->name('citizen.edit');
+        Route::post('/citizen/store', 'store')
+            ->name('citizen.store');
 
-    Route::post('/citizen/{national_id}/update', 'update')
-        ->name('citizen.update');
+        Route::get('/citizen/{national_id}', 'show')
+            ->name('citizen.show');
 
-    Route::post('/citizen/{national_id}/destroy', 'destroy')
-        ->name('citizen.destroy');
-});
+        Route::get('/citizen/{national_id}/edit', 'edit')
+            ->name('citizen.edit');
 
-/**
- * OfficerController.
- */
-Route::controller(OfficerController::class)->group(function () {
-    Route::get('officers', 'index')
-        ->name('officers');
+        Route::post('/citizen/{national_id}/update', 'update')
+            ->name('citizen.update');
 
-    Route::get('/officer/create', 'create')
-        ->name('officer.create');
+        Route::post('/citizen/{national_id}/destroy', 'destroy')
+            ->name('citizen.destroy');
+    });
 
-    Route::post('/officer/store', 'store')
-        ->name('officer.store');
+    /**
+     * OfficerController.
+     */
+    Route::controller(OfficerController::class)->group(function () {
+        Route::get('officers', 'index')
+            ->name('officers');
 
-    Route::get('/officer/{slug}', 'show')
-        ->name('officer.show');
+        Route::get('/officer/create', 'create')
+            ->name('officer.create');
 
-    Route::get('/officer/{slug}/edit', 'edit')
-        ->name('officer.edit');
+        Route::post('/officer/store', 'store')
+            ->name('officer.store');
 
-    Route::post('/officer/{slug}/update', 'update')
-        ->name('officer.update');
+        Route::get('/officer/{slug}', 'show')
+            ->name('officer.show');
 
-    Route::post('/officer/{slug}/destroy', 'destroy')
-        ->name('officer.destroy');
+        Route::get('/officer/{slug}/edit', 'edit')
+            ->name('officer.edit');
+
+        Route::post('/officer/{slug}/update', 'update')
+            ->name('officer.update');
+
+        Route::post('/officer/{slug}/destroy', 'destroy')
+            ->name('officer.destroy');
+    });
 });
