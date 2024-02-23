@@ -51,55 +51,58 @@ Route::middleware(['auth:citizen,officer'])->group(function () {
             ->name('dashboard');
     });
 
-    /**
-     * CitizenController.
-     */
-    Route::controller(CitizenController::class)->group(function () {
-        Route::get('/citizens', 'index')
-            ->name('citizens');
 
-        Route::get('/citizen/create', 'create')
-            ->name('citizen.create');
+    Route::middleware(['only-admin'])->group(function () {
+        /**
+         * CitizenController.
+         */
+        Route::controller(CitizenController::class)->group(function () {
+            Route::get('/citizens', 'index')
+                ->name('citizens');
 
-        Route::post('/citizen/store', 'store')
-            ->name('citizen.store');
+            Route::get('/citizen/create', 'create')
+                ->name('citizen.create');
 
-        Route::get('/citizen/{national_id}', 'show')
-            ->name('citizen.show');
+            Route::post('/citizen/store', 'store')
+                ->name('citizen.store');
 
-        Route::get('/citizen/{national_id}/edit', 'edit')
-            ->name('citizen.edit');
+            Route::get('/citizen/{national_id}', 'show')
+                ->name('citizen.show');
 
-        Route::post('/citizen/{national_id}/update', 'update')
-            ->name('citizen.update');
+            Route::get('/citizen/{national_id}/edit', 'edit')
+                ->name('citizen.edit');
 
-        Route::post('/citizen/{national_id}/destroy', 'destroy')
-            ->name('citizen.destroy');
-    });
+            Route::post('/citizen/{national_id}/update', 'update')
+                ->name('citizen.update');
 
-    /**
-     * OfficerController.
-     */
-    Route::controller(OfficerController::class)->group(function () {
-        Route::get('officers', 'index')
-            ->name('officers');
+            Route::post('/citizen/{national_id}/destroy', 'destroy')
+                ->name('citizen.destroy');
+        });
 
-        Route::get('/officer/create', 'create')
-            ->name('officer.create');
+        /**
+         * OfficerController.
+         */
+        Route::controller(OfficerController::class)->group(function () {
+            Route::get('officers', 'index')
+                ->name('officers');
 
-        Route::post('/officer/store', 'store')
-            ->name('officer.store');
+            Route::get('/officer/create', 'create')
+                ->name('officer.create');
 
-        Route::get('/officer/{slug}', 'show')
-            ->name('officer.show');
+            Route::post('/officer/store', 'store')
+                ->name('officer.store');
 
-        Route::get('/officer/{slug}/edit', 'edit')
-            ->name('officer.edit');
+            Route::get('/officer/{slug}', 'show')
+                ->name('officer.show');
 
-        Route::post('/officer/{slug}/update', 'update')
-            ->name('officer.update');
+            Route::get('/officer/{slug}/edit', 'edit')
+                ->name('officer.edit');
 
-        Route::post('/officer/{slug}/destroy', 'destroy')
-            ->name('officer.destroy');
+            Route::post('/officer/{slug}/update', 'update')
+                ->name('officer.update');
+
+            Route::post('/officer/{slug}/destroy', 'destroy')
+                ->name('officer.destroy');
+        });
     });
 });
