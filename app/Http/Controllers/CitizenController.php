@@ -15,7 +15,7 @@ class CitizenController extends Controller
     public function index()
     {
         return view('pages.dashboard.officer.citizenCrud.index', [
-            'citizens' => Citizen::latest()->get(),
+            'citizens' => Citizen::latest()->paginate(10),
         ]);
     }
 

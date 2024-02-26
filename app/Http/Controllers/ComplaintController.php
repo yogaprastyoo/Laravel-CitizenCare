@@ -12,7 +12,9 @@ class ComplaintController extends Controller
      */
     public function index()
     {
-        //
+        return view('pages.dashboard.complaintCrud.index', [
+            'complaints' => Complaint::latest()->paginate(10),
+        ]);
     }
 
     /**

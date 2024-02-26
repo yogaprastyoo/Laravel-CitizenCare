@@ -1,5 +1,5 @@
 <x-dashboard-layout>
-    @section('title', 'Detail Citizen')
+    @section('title', 'Detail Officer')
 
     {{-- Header --}}
     <header class="flex justify-between">

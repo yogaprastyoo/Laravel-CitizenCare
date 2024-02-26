@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthenticatedSessionController;
 use App\Http\Controllers\CitizenController;
+use App\Http\Controllers\ComplaintController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\OfficerController;
 use Illuminate\Support\Facades\Route;
@@ -17,12 +18,15 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::view('/', 'pages.home')
-    ->name('home');
-Route::view('/about', 'pages.about')
-    ->name('about');
-Route::view('/service', 'pages.service')
-    ->name('service');
+// Route::view('/', 'pages.home')
+//     ->name('home');
+// Route::view('/about', 'pages.about')
+//     ->name('about');
+// Route::view('/service', 'pages.service')
+//     ->name('service');
+
+Route::redirect('/', 'dashboard');
+
 Route::view('/contact', 'pages.contact')
     ->name('contact');
 
@@ -37,7 +41,7 @@ Route::controller(AuthenticatedSessionController::class)->group(function () {
     Route::post('/login/store', 'store')
         ->name('login.store');
 
-    Route::get('/logout', 'destroy')
+    Route::post('/logout', 'destroy')
         ->name('logout');
 });
 
@@ -104,5 +108,13 @@ Route::middleware(['auth:citizen,officer'])->group(function () {
             Route::post('/officer/{slug}/destroy', 'destroy')
                 ->name('officer.destroy');
         });
+    });
+
+    /**
+     * ComplaintController.
+     */
+    Route::controller(ComplaintController::class)->group(function () {
+        Route::get('/complaints', 'index')
+            ->name('complaints');
     });
 });

@@ -15,7 +15,7 @@ class OfficerController extends Controller
     public function index()
     {
         return view('pages.dashboard.officer.officerCrud.index', [
-            'officers' => Officer::all(),
+            'officers' => Officer::latest()->paginate(10),
         ]);
     }
 
@@ -33,7 +33,7 @@ class OfficerController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            "name" => 'required|min:2',
+            "name" => 'required|unique|min:2',
             "email" => 'required|email|unique:officers,email',
             "phone_number" => 'required|min:11|max:13|unique:officers,phone_number',
             "role" => 'required|in:admin,officer',
